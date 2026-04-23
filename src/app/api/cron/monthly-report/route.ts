@@ -66,13 +66,14 @@ export async function GET(req: Request) {
 
     for (const user of users) {
       type UserMonitor = (typeof user.monitors)[number];
+      type UserCheck = UserMonitor["checks"][number];
       const monitorStats: MonthlyMonitorStats[] = user.monitors
         .filter((m: UserMonitor) => m.checks.length > 0)
         .map((m: UserMonitor) => {
           const totalChecks = m.checks.length;
-          const upChecks = m.checks.filter((c) => c.isUp).length;
+          const upChecks = m.checks.filter((c: UserCheck) => c.isUp).length;
           const responseTimes = m.checks
-            .map((c) => c.responseTime)
+            .map((c: UserCheck) => c.responseTime)
             .filter((t): t is number => t !== null);
           const avgResponseTime =
             responseTimes.length > 0
