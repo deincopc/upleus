@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                 String              @id @default(cuid())
+  clerkId            String              @unique
+  email              String              @unique
+  name               String?
+  createdAt          DateTime            @default(now())
+  monitors           Monitor[]
+  projects           Project[]
+  auditLogs          AuditLog[]
+  maintenanceWindows MaintenanceWindow[]
+}
+
+
+model Project {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  slug      String    @unique
+  statusDescription  String?
+  statusBannerMessage String?
+  statusBrandColor   String?
+  statusHideBranding Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  monitors           Monitor[]
+
+  @@index([userId])
+}
+
+model Monitor {
+  id                    String         @id @default(cuid())
+  userId                String
+  user                  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId             String?
+  project               Project?       @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  type                  String         @default("HTTP")
+  name                  String
+  url                   String?
+  intervalMinutes       Int            @default(5)
+  recipients            String[]       @default([])
+  isActive              Boolean        @default(true)
+  isUp                  Boolean        @default(true)
+  lastCheckedAt         DateTime?
+  nextCheckAt           DateTime       @default(now())
+  sslEnabled            Boolean        @default(true)
+  sslValid              Boolean?
+  sslExpiresAt          DateTime?
+  sslDaysUntilExpiry    Int?
+  domainExpiresAt       DateTime?
+  domainDaysUntilExpiry Int?
+  domainCheckedAt       DateTime?
+  port                  Int?
+  heartbeatToken        String?        @unique
+  responseTimeThreshold Int?
+  isSlow                Boolean        @default(false)
+  webhookUrl            String?
+  // Content change detection
+  contentHash           String?
+  contentChangedAt      DateTime?
+  // robots.txt monitoring
+  robotsTxtHash         String?
+  robotsTxtBlocksAll    Boolean?
+  robotsTxtCheckedAt    DateTime?
+  // DNS change detection
+  dnsIps                Json?
+  dnsChangedAt          DateTime?
+  dnsCheckedAt          DateTime?
+  // Shopify-specific fields
+  shopifyChecks             Json?
+  shopifyScannedAt          DateTime?
+  // HTTP-specific enhancements
+  keywordExpected           String?
+  keywordFound              Boolean?
+  jsonAssertPath            String?
+  jsonAssertExpected        String?
+  jsonAssertFailed          Boolean  @default(false)
+  httpSecurityChecks        Json?
+  httpSecurityCheckedAt     DateTime?
+  // WordPress-specific fields
+  wpVersion             String?
+  wpVersionStatus       String?
+  wpLatestVersion       String?
+  wpPlugins             Json?
+  wpThemes              Json?
+  wpSecurityChecks      Json?
+  wpInMaintenanceMode   Boolean?
+  wpGaTrackingId        String?
+  wpGtmContainerId      String?
+  wpScannedAt           DateTime?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  checks                MonitorCheck[]
+  alerts                Alert[]
+  maintenanceWindows    MaintenanceWindow[]
+  // Escalation
+  escalationThresholdMinutes Int?
+  escalationRecipients       String[]    @default([])
+  downSince                  DateTime?
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([nextCheckAt, isActive])
+  @@index([createdAt])
+}
+
+model MaintenanceWindow {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  monitorId String
+  monitor   Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  name      String
+  startsAt  DateTime
+  endsAt    DateTime
+  createdAt DateTime @default(now())
+
+  @@index([monitorId])
+  @@index([userId])
+  @@index([startsAt, endsAt])
+}
+
+model MonitorCheck {
+  id           String   @id @default(cuid())
+  monitorId    String
+  monitor      Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  isUp         Boolean
+  statusCode   Int?
+  responseTime Int?
+  error        String?
+  checkedAt    DateTime @default(now())
+
+  @@index([monitorId, checkedAt])
+}
+
+model Alert {
+  id              String          @id @default(cuid())
+  monitorId       String
+  monitor         Monitor         @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  type            String
+  sentAt          DateTime        @default(now())
+  incidentUpdates IncidentUpdate[]
+
+  @@index([monitorId])
+  @@index([monitorId, type, sentAt])
+}
+
+model IncidentUpdate {
+  id        String   @id @default(cuid())
+  alertId   String
+  alert     Alert    @relation(fields: [alertId], references: [id], onDelete: Cascade)
+  message   String
+  status    String   // "investigating" | "identified" | "monitoring" | "resolved"
+  createdAt DateTime @default(now())
+
+  @@index([alertId])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action     String   // CREATE | UPDATE | DELETE
+  resource   String   // MONITOR | PROJECT
+  resourceId String
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([resourceId])
+}
