@@ -74,10 +74,10 @@ export async function GET(req: Request) {
           const upChecks = m.checks.filter((c: UserCheck) => c.isUp).length;
           const responseTimes = m.checks
             .map((c: UserCheck) => c.responseTime)
-            .filter((t): t is number => t !== null);
+            .filter((t: number | null): t is number => t !== null);
           const avgResponseTime =
             responseTimes.length > 0
-              ? Math.round(responseTimes.reduce((s, t) => s + t, 0) / responseTimes.length)
+              ? Math.round(responseTimes.reduce((s: number, t: number) => s + t, 0) / responseTimes.length)
               : null;
 
           return {
