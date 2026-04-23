@@ -186,7 +186,7 @@ export default async function IncidentDetailPage({
           <div className="absolute left-[7px] top-3 bottom-3 w-px bg-gray-200" />
           <div className="space-y-0">
 
-            {beforeChecks.map((check) => (
+            {beforeChecks.map((check: Check) => (
               <div key={check.id} className="flex items-start gap-4 pb-3">
                 <div className="w-3.5 h-3.5 rounded-full bg-emerald-200 border-2 border-emerald-300 flex-shrink-0 mt-0.5 relative z-10" />
                 <div className="pb-0 min-w-0">
@@ -213,7 +213,7 @@ export default async function IncidentDetailPage({
               </div>
             )}
 
-            {visibleBefore.map((check) => (
+            {visibleBefore.map((check: Check) => (
               <div key={check.id} className="flex items-start gap-4 pb-3">
                 <div className="w-3.5 h-3.5 rounded-full bg-red-200 border-2 border-red-300 flex-shrink-0 mt-0.5 relative z-10" />
                 <div className="min-w-0">
@@ -239,7 +239,7 @@ export default async function IncidentDetailPage({
               </div>
             )}
 
-            {visibleAfter.map((check) => (
+            {visibleAfter.map((check: Check) => (
               <div key={check.id} className="flex items-start gap-4 pb-3">
                 <div className="w-3.5 h-3.5 rounded-full bg-red-200 border-2 border-red-300 flex-shrink-0 mt-0.5 relative z-10" />
                 <div className="min-w-0">
