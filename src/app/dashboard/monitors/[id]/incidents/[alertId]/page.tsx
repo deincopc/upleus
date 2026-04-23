@@ -77,8 +77,10 @@ export default async function IncidentDetailPage({
     orderBy: { checkedAt: "asc" },
   });
 
+  type Check = (typeof checks)[number];
+
   const downChecks = checks.filter(
-    (c) => !c.isUp && c.checkedAt >= incidentStart && c.checkedAt <= incidentEnd,
+    (c: Check) => !c.isUp && c.checkedAt >= incidentStart && c.checkedAt <= incidentEnd,
   );
 
   const firstError = downChecks[0]?.error ?? null;
@@ -94,11 +96,11 @@ export default async function IncidentDetailPage({
   const collapsedCount = shouldCollapse ? intermediateChecks.length - 4 : 0;
 
   const beforeChecks = checks
-    .filter((c) => c.isUp && c.checkedAt < incidentStart)
+    .filter((c: Check) => c.isUp && c.checkedAt < incidentStart)
     .slice(-3);
 
   const recoveryCheck = recoveredAlert
-    ? checks.find((c) => c.isUp && c.checkedAt >= recoveredAlert.sentAt)
+    ? checks.find((c: Check) => c.isUp && c.checkedAt >= recoveredAlert.sentAt)
     : null;
 
   return (
