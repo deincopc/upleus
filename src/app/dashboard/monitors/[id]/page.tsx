@@ -48,12 +48,13 @@ function TabBar({
   ];
 
   return (
-    <div className="flex gap-1 border-b border-gray-200 dark:border-gray-800 mb-8">
+    <div className="overflow-x-auto -mx-6 px-6 border-b border-gray-200 dark:border-gray-800 mb-8">
+      <div className="flex gap-1 min-w-max">
       {tabs.map((tab) => (
         <Link
           key={tab.id}
           href={`/dashboard/monitors/${monitorId}${tab.id === "overview" ? "" : `?tab=${tab.id}`}`}
-          className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
+          className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
             active === tab.id
               ? "border-gray-900 dark:border-gray-100 text-gray-900 dark:text-gray-100"
               : "border-transparent text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
@@ -71,6 +72,7 @@ function TabBar({
           ) : null}
         </Link>
       ))}
+      </div>
     </div>
   );
 }
@@ -180,7 +182,7 @@ export default async function MonitorDetailPage({
       <Link href="/dashboard" className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
         ← Back to monitors
       </Link>
-      <div className="flex items-start justify-between gap-4 mt-4">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mt-4">
         <div>
           <div className="flex items-center gap-3 flex-wrap">
             <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
@@ -211,7 +213,7 @@ export default async function MonitorDetailPage({
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 font-mono ml-6">{monitor.url}</p>
           )}
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0 mt-1">
+        <div className="flex items-center gap-2 sm:flex-shrink-0">
           {(isWordPress || hasWpData) && <RescanButton monitorId={monitor.id} />}
           <TestAlertButton monitorId={monitor.id} />
           <PauseButton monitorId={monitor.id} isActive={monitor.isActive} />
@@ -232,11 +234,11 @@ export default async function MonitorDetailPage({
 
   const statsGrid = (
     <div className={`grid gap-4 mb-8 ${
-      isWordPress ? "grid-cols-3"
+      isWordPress ? "grid-cols-2 sm:grid-cols-3"
       : isDomain || isHeartbeat ? "grid-cols-2"
-      : isTcp ? "grid-cols-3"
-      : monitor.domainDaysUntilExpiry !== null ? "grid-cols-4"
-      : "grid-cols-3"
+      : isTcp ? "grid-cols-2 sm:grid-cols-3"
+      : monitor.domainDaysUntilExpiry !== null ? "grid-cols-2 sm:grid-cols-4"
+      : "grid-cols-2 sm:grid-cols-3"
     }`}>
       {isWordPress ? (
         <>
@@ -473,6 +475,10 @@ export default async function MonitorDetailPage({
                       { key: "installPhpAccessible",     label: "install.php not accessible",              pass: !wpSecurityChecks.installPhpAccessible },
                       { key: "backupFilesExposed",       label: "No backup files in web root",             pass: !wpSecurityChecks.backupFilesExposed },
                       { key: "outdatedPhp",              label: `PHP version current${wpSecurityChecks.detectedPhpVersion ? ` (${wpSecurityChecks.detectedPhpVersion})` : ""}`, pass: !wpSecurityChecks.outdatedPhp },
+                      { key: "missingHsts",              label: "HSTS header present",                        pass: !wpSecurityChecks.missingHsts },
+                      { key: "missingXFrameOptions",     label: "X-Frame-Options header set",                 pass: !wpSecurityChecks.missingXFrameOptions },
+                      { key: "missingXContentTypeOptions", label: "X-Content-Type-Options header set",        pass: !wpSecurityChecks.missingXContentTypeOptions },
+                      { key: "serverVersionDisclosed",   label: `Server version not disclosed${wpSecurityChecks.detectedServerHeader ? ` (${wpSecurityChecks.detectedServerHeader})` : ""}`, pass: !wpSecurityChecks.serverVersionDisclosed },
                     ] as { key: string; label: string; pass: boolean }[]
                   ).map(({ key, label, pass }) => (
                     <div key={key} className="flex items-center justify-between text-sm">

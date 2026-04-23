@@ -455,7 +455,7 @@ export default async function StatusPage({
       </main>
 
       <footer className="border-t border-gray-200 py-6 px-6 mt-12">
-        <div className="max-w-3xl mx-auto flex items-center justify-between">
+        <div className="max-w-3xl mx-auto flex items-center justify-center gap-2">
           {!project.statusHideBranding ? (
             <>
               <span className="text-xs text-gray-400">Powered by</span>

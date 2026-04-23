@@ -28,7 +28,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const since = new Date(Date.now() - config.hours * 60 * 60 * 1000);
 
   const checks = await prisma.monitorCheck.findMany({
-    where: { monitorId: id, checkedAt: { gte: since }, isUp: true, responseTime: { not: null } },
+    where: { monitorId: id, checkedAt: { gte: since }, responseTime: { not: null } },
     select: { checkedAt: true, responseTime: true },
     orderBy: { checkedAt: "asc" },
   });
