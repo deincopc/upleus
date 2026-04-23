@@ -15,7 +15,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://upleus.com";
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "Upleus — Uptime & SSL Monitoring",
+    default: "Upleus",
     template: "%s | Upleus",
   },
   description:
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Upleus",
-    title: "Upleus — Uptime & SSL Monitoring",
+    title: "Upleus — Uptime Monitoring",
     description:
       "Monitor your websites, APIs, domains, and cron jobs. Get instant alerts when something goes wrong.",
     url: APP_URL,
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Upleus — Uptime & SSL Monitoring",
+    title: "Upleus — Uptime Monitoring",
     description:
       "Monitor your websites, APIs, domains, and cron jobs. Get instant alerts when something goes wrong.",
     images: ["/og.png"],

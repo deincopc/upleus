@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { Logo } from "@/components/Logo";
 import { CodeTabs } from "@/components/CodeTabs";
 import { HeroBlobs } from "@/components/home/HeroBlobs";
 import { ScrollReveal } from "@/components/home/ScrollReveal";
+
+export const metadata: Metadata = {
+  title: "Upleus — Uptime & SSL Monitoring",
+  description:
+    "Monitor your websites, APIs, domains, and cron jobs. Get instant alerts when something goes wrong — before your users notice.",
+};
 
 export default async function Home() {
   const { userId } = await auth();
@@ -84,7 +91,7 @@ export default async function Home() {
           {/* Status badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium mt-10 mb-8">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            HTTP · TCP · Heartbeat · SSL & Domain · WordPress
+            HTTP · TCP · Heartbeat · WordPress · Shopify · Domain & SSL
           </div>
 
           <h1 className="text-6xl sm:text-7xl font-bold tracking-tight leading-[1.04]">
@@ -102,7 +109,7 @@ export default async function Home() {
           </h1>
 
           <p className="mt-6 text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
-            Monitor websites, TCP ports, cron jobs, SSL certs, domain expiry, and WordPress security.
+            Monitor websites, TCP ports, cron jobs, SSL certs, domain expiry, WordPress security, and Shopify stores.
             Get alerted the moment something breaks — before your users notice.
           </p>
 
@@ -121,7 +128,7 @@ export default async function Home() {
               See what we monitor ↓
             </a>
           </div>
-          <p className="mt-4 text-xs text-gray-700">No credit card · 5 monitors per type · Free forever</p>
+          <p className="mt-4 text-xs text-gray-700">No credit card · 5 monitors free · Free forever</p>
         </div>
 
         {/* Dashboard mockup */}
@@ -169,7 +176,7 @@ export default async function Home() {
                 {([
                   { name: "app.example.com",      badge: null,          ms: "118ms", status: "up",   extra: null         },
                   { name: "db.example.com:5432",  badge: "TCP",         ms: "4ms",   status: "up",   extra: null         },
-                  { name: "checkout.example.com", badge: null,          ms: "—",     status: "down", extra: null         },
+                  { name: "my-brand.myshopify.com", badge: "Shopify",     ms: "—",     status: "down", extra: "pwd on"     },
                   { name: "Daily backup job",      badge: "Heartbeat",   ms: "—",     status: "up",   extra: null         },
                   { name: "example.com",          badge: null,          ms: "203ms", status: "up",   extra: "SSL 23d"    },
                   { name: "client-blog.com",      badge: "WordPress",   ms: "—",     status: "up",   extra: "2 issues"   },
@@ -227,7 +234,7 @@ export default async function Home() {
       <section className="border-y border-white/[0.05] bg-white/[0.02]">
         <div className="max-w-4xl mx-auto px-6 py-10 grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
           {([
-            { value: "1 min",  label: "check interval" },
+            { value: "3 min",  label: "check interval" },
             { value: "< 60s", label: "time to alert" },
             { value: "5",      label: "monitor types" },
             { value: "Free",   label: "to get started" },
@@ -252,7 +259,7 @@ export default async function Home() {
           <ScrollReveal>
             <div className="text-center mb-16">
               <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">
-                Five ways to know<br className="hidden sm:block" /> something's wrong
+                Six ways to know<br className="hidden sm:block" /> something's wrong
               </h2>
               <p className="mt-4 text-gray-400 max-w-lg mx-auto text-lg">
                 Most tools only ping your homepage. We go deeper.
@@ -261,12 +268,12 @@ export default async function Home() {
           </ScrollReveal>
 
           {/* Primary feature cards */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {([
               {
                 label: "HTTP",
                 title: "Website uptime",
-                desc: "Hit your URL every minute, record status code and response time. Down alert in under 60 seconds.",
+                desc: "Hit your URL every 3 minutes, record status code and response time. Down alert fast.",
                 accent: "#10b981",
                 accentBg: "rgba(16,185,129,0.08)",
                 accentBorder: "rgba(16,185,129,0.2)",
@@ -330,6 +337,20 @@ export default async function Home() {
                 icon: (
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-5 h-5" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                  </svg>
+                ),
+              },
+              {
+                label: "Shopify",
+                title: "Store health",
+                desc: "Auto-detect password mode, maintenance mode, and cart API failures. Know when your store goes dark before customers bounce.",
+                accent: "#06b6d4",
+                accentBg: "rgba(6,182,212,0.08)",
+                accentBorder: "rgba(6,182,212,0.2)",
+                accentText: "text-cyan-400",
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-5 h-5" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                   </svg>
                 ),
               },
@@ -517,7 +538,7 @@ export default async function Home() {
               {
                 n: "02",
                 title: "We check on schedule",
-                desc: "HTTP and TCP polled every minute. SSL, domain, and WordPress security scanned daily. Heartbeat waits for your job to report in.",
+                desc: "HTTP and TCP polled every 3 minutes. SSL, domain, WordPress, and Shopify scanned regularly. Heartbeat waits for your job to report in.",
               },
               {
                 n: "03",
@@ -653,11 +674,12 @@ export default async function Home() {
                   <p className="text-sm text-gray-500 mb-7">Everything that's built, free to use.</p>
                   <ul className="space-y-3 mb-8">
                     {[
-                      "5 monitors per type",
-                      "HTTP, TCP, heartbeat, domain & WordPress",
-                      "1-minute check interval",
+                      "5 monitors total",
+                      "HTTP, TCP, heartbeat, domain, WordPress & Shopify",
+                      "3-minute check interval",
                       "SSL & domain expiry alerts",
                       "WordPress security scanning",
+                      "Shopify store health checks",
                       "Email alerts with recovery",
                       "Public status page per project",
                     ].map((f) => (
@@ -694,7 +716,7 @@ export default async function Home() {
                   <p className="text-sm text-gray-600 mb-7">For teams and agencies that need more.</p>
                   <ul className="space-y-3 mb-8">
                     {[
-                      "Higher limits per monitor type",
+                      "Higher monitor limits",
                       "Slack & webhook alerts",
                       "WordPress vulnerability scanning",
                       "Keyword & content monitoring",
@@ -758,7 +780,7 @@ export default async function Home() {
                 Create free account →
               </Link>
             </div>
-            <p className="mt-5 text-xs text-gray-700">No credit card · 5 monitors per type, free</p>
+            <p className="mt-5 text-xs text-gray-700">No credit card · 5 monitors free</p>
           </div>
         </ScrollReveal>
       </section>
