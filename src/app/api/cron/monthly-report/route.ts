@@ -65,9 +65,10 @@ export async function GET(req: Request) {
     cursor = users[users.length - 1].id;
 
     for (const user of users) {
+      type UserMonitor = (typeof user.monitors)[number];
       const monitorStats: MonthlyMonitorStats[] = user.monitors
-        .filter((m) => m.checks.length > 0)
-        .map((m) => {
+        .filter((m: UserMonitor) => m.checks.length > 0)
+        .map((m: UserMonitor) => {
           const totalChecks = m.checks.length;
           const upChecks = m.checks.filter((c) => c.isUp).length;
           const responseTimes = m.checks
