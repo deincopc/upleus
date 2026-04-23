@@ -78,6 +78,7 @@ export default async function IncidentDetailPage({
   });
 
   type Check = (typeof checks)[number];
+  type IncidentUpdate = (typeof downAlert.incidentUpdates)[number];
 
   const downChecks = checks.filter(
     (c: Check) => !c.isUp && c.checkedAt >= incidentStart && c.checkedAt <= incidentEnd,
@@ -161,7 +162,7 @@ export default async function IncidentDetailPage({
 
         {downAlert.incidentUpdates.length > 0 && (
           <div className="space-y-3 mb-4">
-            {downAlert.incidentUpdates.map((u) => (
+            {downAlert.incidentUpdates.map((u: IncidentUpdate) => (
               <div key={u.id} className={`border rounded-xl px-4 py-3 ${STATUS_COLORS[u.status] ?? "bg-gray-50 text-gray-700 border-gray-200"}`}>
                 <div className="flex items-center justify-between gap-2 mb-1">
                   <span className="text-xs font-semibold uppercase tracking-wide">
