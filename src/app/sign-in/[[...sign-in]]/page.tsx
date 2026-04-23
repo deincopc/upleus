@@ -7,7 +7,7 @@ export default function SignInPage() {
       <div className="mb-8">
         <Logo href="/" height={36} />
       </div>
-      <SignIn />
+      <SignIn fallbackRedirectUrl="/dashboard" />
     </div>
   );
 }

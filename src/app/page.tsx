@@ -27,13 +27,15 @@ export default async function Home() {
 
       {/* ── Nav ─────────────────────────────────────────────────── */}
       <nav className="fixed top-0 inset-x-0 z-50 bg-gray-950/75 backdrop-blur-xl border-b border-white/[0.06]">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Logo href="/" height={26} dark />
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center">
+          <div className="flex-1">
+            <Logo href="/" height={26} dark />
+          </div>
           <div className="hidden sm:flex items-center gap-8">
             <a href="#features" className="text-sm text-gray-400 hover:text-white transition-colors">Features</a>
             <a href="#pricing" className="text-sm text-gray-400 hover:text-white transition-colors">Pricing</a>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex-1 flex items-center justify-end gap-3">
             {userId ? (
               <Link
                 href="/dashboard"
@@ -89,12 +91,13 @@ export default async function Home() {
         <div className="relative z-10 text-center max-w-4xl mx-auto px-6 pb-12">
 
           {/* Status badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium mt-10 mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            HTTP · TCP · Heartbeat · WordPress · Shopify · Domain & SSL
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] sm:text-xs font-medium mt-10 mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+            <span className="sm:hidden">6 monitor types</span>
+            <span className="hidden sm:inline">HTTP · TCP · Heartbeat · WordPress · Shopify · Domain & SSL</span>
           </div>
 
-          <h1 className="text-6xl sm:text-7xl font-bold tracking-tight leading-[1.04]">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.04]">
             Stop finding out
             <span
               className="block mt-1 bg-clip-text text-transparent animate-shimmer"
@@ -108,7 +111,7 @@ export default async function Home() {
             </span>
           </h1>
 
-          <p className="mt-6 text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
+          <p className="mt-6 text-base sm:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
             Monitor websites, TCP ports, cron jobs, SSL certs, domain expiry, WordPress security, and Shopify stores.
             Get alerted the moment something breaks — before your users notice.
           </p>
@@ -132,7 +135,7 @@ export default async function Home() {
         </div>
 
         {/* Dashboard mockup */}
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-6 pb-0">
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-6 pb-0 hidden sm:block">
           {/* Glow beneath mockup */}
           <div
             className="absolute inset-x-24 top-8 h-32 pointer-events-none"
@@ -248,7 +251,7 @@ export default async function Home() {
       </section>
 
       {/* ── Features ────────────────────────────────────────────── */}
-      <section id="features" className="py-32 px-6 relative overflow-hidden">
+      <section id="features" className="py-20 sm:py-32 px-6 relative overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ background: "radial-gradient(ellipse 80% 50% at 50% -10%, rgba(16,185,129,0.07), transparent)" }}
@@ -257,11 +260,11 @@ export default async function Home() {
 
         <div className="relative max-w-6xl mx-auto">
           <ScrollReveal>
-            <div className="text-center mb-16">
+            <div className="text-center mb-10 sm:mb-16">
               <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">
                 Six ways to know<br className="hidden sm:block" /> something's wrong
               </h2>
-              <p className="mt-4 text-gray-400 max-w-lg mx-auto text-lg">
+              <p className="mt-4 text-gray-400 max-w-lg mx-auto text-base sm:text-lg">
                 Most tools only ping your homepage. We go deeper.
               </p>
             </div>
@@ -442,7 +445,7 @@ export default async function Home() {
       </section>
 
       {/* ── Heartbeat / code integration ────────────────────────── */}
-      <section className="py-32 px-6 relative overflow-hidden border-t border-white/[0.04]">
+      <section className="py-20 sm:py-32 px-6 relative overflow-hidden border-t border-white/[0.04]">
         {/* Violet glow — right side */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -457,7 +460,7 @@ export default async function Home() {
         />
 
         <div className="relative max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
             <ScrollReveal>
               <div>
@@ -481,7 +484,7 @@ export default async function Home() {
                   </span>
                 </h2>
 
-                <p className="mt-5 text-gray-400 leading-relaxed text-lg">
+                <p className="mt-5 text-gray-400 leading-relaxed text-base sm:text-lg">
                   Cron jobs fail without telling anyone. The script errors, the process gets killed, the server reboots.
                   Add one line — we alert you the moment your job stops checking in.
                 </p>
@@ -513,7 +516,7 @@ export default async function Home() {
       </section>
 
       {/* ── How it works ────────────────────────────────────────── */}
-      <section className="py-32 px-6 relative overflow-hidden border-t border-white/[0.04]">
+      <section className="py-20 sm:py-32 px-6 relative overflow-hidden border-t border-white/[0.04]">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(16,185,129,0.04), transparent)" }}
@@ -522,9 +525,9 @@ export default async function Home() {
 
         <div className="relative max-w-5xl mx-auto">
           <ScrollReveal>
-            <div className="text-center mb-16">
+            <div className="text-center mb-10 sm:mb-16">
               <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">Set up in two minutes</h2>
-              <p className="mt-4 text-gray-400 text-lg">No agents, no SDK, no infrastructure to touch.</p>
+              <p className="mt-4 text-gray-400 text-base sm:text-lg">No agents, no SDK, no infrastructure to touch.</p>
             </div>
           </ScrollReveal>
 
@@ -567,7 +570,7 @@ export default async function Home() {
       </section>
 
       {/* ── Built for agencies ───────────────────────────────────── */}
-      <section className="py-32 px-6 relative overflow-hidden border-t border-white/[0.04]">
+      <section className="py-20 sm:py-32 px-6 relative overflow-hidden border-t border-white/[0.04]">
         <div
           className="absolute right-0 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none"
           style={{ background: "radial-gradient(circle, rgba(16,185,129,0.06), transparent 70%)" }}
@@ -575,7 +578,7 @@ export default async function Home() {
         />
 
         <div className="relative max-w-5xl mx-auto">
-          <div className="grid sm:grid-cols-2 gap-16 items-center">
+          <div className="grid sm:grid-cols-2 gap-10 sm:gap-16 items-center">
 
             <ScrollReveal>
               <div>
@@ -634,7 +637,7 @@ export default async function Home() {
       </section>
 
       {/* ── Pricing ─────────────────────────────────────────────── */}
-      <section id="pricing" className="py-32 px-6 relative overflow-hidden border-t border-white/[0.04]">
+      <section id="pricing" className="py-20 sm:py-32 px-6 relative overflow-hidden border-t border-white/[0.04]">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ background: "radial-gradient(ellipse 60% 70% at 50% 110%, rgba(16,185,129,0.09), transparent)" }}
@@ -645,7 +648,7 @@ export default async function Home() {
           <ScrollReveal>
             <div className="text-center mb-14">
               <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">Free while we grow</h2>
-              <p className="mt-4 text-gray-400 text-lg">No credit card. No trial. No bait-and-switch.</p>
+              <p className="mt-4 text-gray-400 text-base sm:text-lg">No credit card. No trial. No bait-and-switch.</p>
             </div>
           </ScrollReveal>
 
@@ -744,7 +747,7 @@ export default async function Home() {
       </section>
 
       {/* ── Final CTA ───────────────────────────────────────────── */}
-      <section className="py-32 px-6 relative overflow-hidden border-t border-white/[0.04]">
+      <section className="py-20 sm:py-32 px-6 relative overflow-hidden border-t border-white/[0.04]">
         {/* Big emerald radial glow */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -771,7 +774,7 @@ export default async function Home() {
             >
               Who finds out first?
             </p>
-            <p className="mt-6 text-gray-400 text-lg">Takes two minutes to set up. Free forever.</p>
+            <p className="mt-6 text-gray-400 text-base sm:text-lg">Takes two minutes to set up. Free forever.</p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/sign-up"
@@ -789,7 +792,7 @@ export default async function Home() {
       <footer className="border-t border-white/[0.05] py-10 px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <Logo href="/" height={22} dark />
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             <a href="#features" className="text-gray-700 text-xs hover:text-gray-400 transition-colors">Features</a>
             <a href="#pricing" className="text-gray-700 text-xs hover:text-gray-400 transition-colors">Pricing</a>
             <Link href="/sign-in" className="text-gray-700 text-xs hover:text-gray-400 transition-colors">Sign in</Link>
