@@ -186,12 +186,18 @@ export default async function StatusPage({
   if (!project) notFound();
 
   const monitors = project.monitors;
-  const inMaintenanceIds = new Set(activeWindows.map((w) => w.monitorId));
+
+  type ActiveWindow = (typeof activeWindows)[number];
+  type UpcomingWindow = (typeof upcomingWindows)[number];
+  type StatusMonitor = (typeof monitors)[number];
+  type MonitorAlertRow = StatusMonitor["alerts"][number];
+
+  const inMaintenanceIds = new Set(activeWindows.map((w: ActiveWindow) => w.monitorId));
 
   // Exclude monitors in active maintenance from the overall status calculation
-  const nonMaintenanceMonitors = monitors.filter((m) => !inMaintenanceIds.has(m.id));
-  const someDown = nonMaintenanceMonitors.some((m) => !m.isUp);
-  const allDown = nonMaintenanceMonitors.length > 0 && nonMaintenanceMonitors.every((m) => !m.isUp);
+  const nonMaintenanceMonitors = monitors.filter((m: StatusMonitor) => !inMaintenanceIds.has(m.id));
+  const someDown = nonMaintenanceMonitors.some((m: StatusMonitor) => !m.isUp);
+  const allDown = nonMaintenanceMonitors.length > 0 && nonMaintenanceMonitors.every((m: StatusMonitor) => !m.isUp);
 
   const statusLabel = allDown ? "Major outage" : someDown ? "Partial outage" : "All systems operational";
   const statusBg = allDown ? "from-red-50 to-white border-red-100" : someDown ? "from-yellow-50 to-white border-yellow-100" : "from-emerald-50 to-white border-emerald-100";
@@ -211,9 +217,9 @@ export default async function StatusPage({
 
   const incidents: Incident[] = [];
   for (const m of monitors) {
-    const sorted = [...m.alerts].sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
-    const downs = sorted.filter((a) => a.type === "DOWN");
-    const recoveries = sorted.filter((a) => a.type === "RECOVERED").map((r) => ({ ...r, used: false }));
+    const sorted = [...m.alerts].sort((a: MonitorAlertRow, b: MonitorAlertRow) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
+    const downs = sorted.filter((a: MonitorAlertRow) => a.type === "DOWN");
+    const recoveries = sorted.filter((a: MonitorAlertRow) => a.type === "RECOVERED").map((r: MonitorAlertRow) => ({ ...r, used: false }));
 
     for (const down of downs) {
       const downTime = new Date(down.sentAt).getTime();
@@ -295,7 +301,7 @@ export default async function StatusPage({
             <div>
               <p className="text-sm font-medium text-amber-800">Maintenance in progress</p>
               <p className="text-xs text-amber-700 mt-0.5 opacity-80">
-                {activeWindows.map((w) => w.name).join(", ")} · alerts suppressed during this window
+                {activeWindows.map((w: ActiveWindow) => w.name).join(", ")} · alerts suppressed during this window
               </p>
             </div>
           </div>
@@ -310,7 +316,7 @@ export default async function StatusPage({
             <div>
               <p className="text-sm font-medium text-blue-800">Scheduled maintenance in the next 24 hours</p>
               <div className="mt-1 space-y-0.5">
-                {upcomingWindows.map((w) => (
+                {upcomingWindows.map((w: UpcomingWindow) => (
                   <p key={`${w.monitorId}-${w.startsAt.toISOString()}`} className="text-xs text-blue-700 opacity-80">
                     {w.name} · {w.startsAt.toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "UTC", timeZoneName: "short" })}
                   </p>
@@ -345,15 +351,16 @@ export default async function StatusPage({
             {monitors.length === 0 ? (
               <div className="p-8 text-center text-gray-400 text-sm">No monitors configured.</div>
             ) : (
-              monitors.map((monitor) => {
+              monitors.map((monitor: StatusMonitor) => {
                 const isHeartbeat = monitor.type === "HEARTBEAT";
                 const isTcp = monitor.type === "TCP";
                 const inMaintenance = inMaintenanceIds.has(monitor.id);
                 const statusOk = inMaintenance ? "Maintenance" : isHeartbeat ? (monitor.isUp ? "Operational" : "Missed") : (monitor.isUp ? "Operational" : "Outage");
                 const displayUrl = isTcp && monitor.port ? `${monitor.url}:${monitor.port}` : monitor.url;
                 const dayBuckets = buildDayBuckets(monitor.checks, 30);
-                const totalUp = dayBuckets.reduce((s, b) => s + b.up, 0);
-                const totalChecks = dayBuckets.reduce((s, b) => s + b.total, 0);
+                type DayBucket = (typeof dayBuckets)[number];
+                const totalUp = dayBuckets.reduce((s: number, b: DayBucket) => s + b.up, 0);
+                const totalChecks = dayBuckets.reduce((s: number, b: DayBucket) => s + b.total, 0);
                 return (
                   <div key={monitor.id} className="px-5 py-4">
                     <div className="flex items-center justify-between mb-3">
@@ -389,7 +396,7 @@ export default async function StatusPage({
                     </div>
                     {/* 90-day uptime bars */}
                     <div className="flex gap-0.5">
-                      {dayBuckets.map((b, i) => (
+                      {dayBuckets.map((b: DayBucket, i: number) => (
                         <div
                           key={i}
                           title={b.total === 0 ? b.date + " — no data" : `${b.date} — ${uptimePercent(b.up, b.total)} uptime`}

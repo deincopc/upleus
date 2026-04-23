@@ -111,6 +111,9 @@ export default async function MonitorDetailPage({
 
   if (!monitor) notFound();
 
+  type MonitorCheck = (typeof monitor.checks)[number];
+  type MonitorAlert = (typeof monitor.alerts)[number];
+
   const isDomain = monitor.type === "DOMAIN";
   const isTcp = monitor.type === "TCP";
   const isHeartbeat = monitor.type === "HEARTBEAT";
@@ -119,7 +122,7 @@ export default async function MonitorDetailPage({
   const hasShopifyData = !!(monitor.shopifyScannedAt && monitor.shopifyChecks);
   const showInsights = !isDomain && !isTcp && !isHeartbeat;
 
-  const upChecks = monitor.checks.filter((c) => c.isUp).length;
+  const upChecks = monitor.checks.filter((c: MonitorCheck) => c.isUp).length;
   const uptimePct =
     monitor.checks.length > 0
       ? ((upChecks / monitor.checks.length) * 100).toFixed(1)
@@ -158,14 +161,14 @@ export default async function MonitorDetailPage({
     (shopifyChecks?.passwordModeEnabled ? 1 : 0);
 
   const avgResponse =
-    !isDomain && monitor.checks.filter((c) => c.responseTime).length > 0
+    !isDomain && monitor.checks.filter((c: MonitorCheck) => c.responseTime).length > 0
       ? Math.round(
-          monitor.checks.filter((c) => c.responseTime).reduce((s, c) => s + c.responseTime!, 0) /
-          monitor.checks.filter((c) => c.responseTime).length
+          monitor.checks.filter((c: MonitorCheck) => c.responseTime).reduce((s: number, c: MonitorCheck) => s + c.responseTime!, 0) /
+          monitor.checks.filter((c: MonitorCheck) => c.responseTime).length
         )
       : null;
 
-  const incidentCount = monitor.alerts.filter((a) => a.type === "DOWN").length;
+  const incidentCount = monitor.alerts.filter((a: MonitorAlert) => a.type === "DOWN").length;
 
   const validTabs: Tab[] = ["overview", "insights", "incidents", "settings"];
   const activeTab: Tab = validTabs.includes(tabParam as Tab) ? (tabParam as Tab) : "overview";
@@ -750,6 +753,8 @@ export default async function MonitorDetailPage({
     orderBy: { startsAt: "asc" },
   });
 
+  type MaintenanceWindowRow = (typeof maintenanceWindows)[number];
+
   return (
     <div>
       {header}
@@ -782,7 +787,7 @@ export default async function MonitorDetailPage({
         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
           <MonitorMaintenanceSection
             monitorId={monitor.id}
-            initialWindows={maintenanceWindows.map((w) => ({
+            initialWindows={maintenanceWindows.map((w: MaintenanceWindowRow) => ({
               id: w.id,
               name: w.name,
               startsAt: w.startsAt.toISOString(),

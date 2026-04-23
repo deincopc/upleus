@@ -30,15 +30,19 @@ export default async function ProjectPage({
 
   if (!project) notFound();
 
+  type ProjectMonitor = (typeof project.monitors)[number];
+
   // Unassigned monitors available to add to this project
   const unassigned = await prisma.monitor.findMany({
     where: { userId: user.id, projectId: null },
     orderBy: { createdAt: "desc" },
   });
 
+  type UnassignedMonitor = (typeof unassigned)[number];
+
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
   const statusUrl = `${appUrl}/status/${project.id}`;
-  const someDown = project.monitors.some((m) => !m.isUp);
+  const someDown = project.monitors.some((m: ProjectMonitor) => !m.isUp);
 
   return (
     <div className="space-y-8">
@@ -114,7 +118,7 @@ export default async function ProjectPage({
           </div>
         ) : (
           <div className="flex flex-col gap-3">
-            {project.monitors.map((monitor) => (
+            {project.monitors.map((monitor: ProjectMonitor) => (
               <MonitorCard key={monitor.id} monitor={monitor} />
             ))}
           </div>
@@ -128,7 +132,7 @@ export default async function ProjectPage({
             Assign existing monitors
           </h2>
           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl divide-y divide-gray-100 dark:divide-gray-800 overflow-hidden">
-            {unassigned.map((monitor) => (
+            {unassigned.map((monitor: UnassignedMonitor) => (
               <div key={monitor.id} className="flex items-center justify-between px-5 py-3.5">
                 <div>
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{monitor.name}</p>
