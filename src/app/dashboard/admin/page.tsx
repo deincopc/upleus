@@ -85,8 +85,9 @@ export default async function AdminPage() {
   }
 
   const typeOrder = ["HTTP", "WORDPRESS", "DOMAIN", "TCP", "HEARTBEAT"];
+  type GroupByCount = { type: string; _count: { id: number } };
   const typeMap = Object.fromEntries(
-    monitorsByType.map((r) => [r.type, r._count.id])
+    monitorsByType.map((r: GroupByCount) => [r.type, r._count.id])
   );
 
   return (
@@ -171,7 +172,7 @@ export default async function AdminPage() {
           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5">
             <p className="text-xs font-medium text-gray-400 dark:text-gray-500 mb-3">By type (all time)</p>
             <div className="space-y-2">
-              {alertsByType.map((a) => (
+              {alertsByType.map((a: GroupByCount) => (
                 <div key={a.type} className="flex items-center justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-400 font-mono text-xs">{a.type}</span>
                   <span className="font-semibold text-gray-900 dark:text-gray-100">{a._count.id}</span>
