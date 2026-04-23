@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
 
 type AuditAction = "CREATE" | "UPDATE" | "DELETE";
 type AuditResource = "MONITOR" | "PROJECT";
@@ -18,7 +17,7 @@ export async function writeAuditLog(
         action,
         resource,
         resourceId,
-        metadata: metadata as Prisma.InputJsonValue | undefined,
+        metadata: metadata as object | undefined,
       },
     });
   } catch (err) {
