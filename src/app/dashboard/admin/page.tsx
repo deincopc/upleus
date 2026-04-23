@@ -86,6 +86,8 @@ export default async function AdminPage() {
 
   const typeOrder = ["HTTP", "WORDPRESS", "DOMAIN", "TCP", "HEARTBEAT"];
   type GroupByCount = { type: string; _count: { id: number } };
+  type TopUser = (typeof topUsers)[number];
+  type RecentUser = (typeof recentUsers)[number];
   const typeMap = Object.fromEntries(
     monitorsByType.map((r: GroupByCount) => [r.type, r._count.id])
   );
@@ -196,7 +198,7 @@ export default async function AdminPage() {
               </tr>
             </thead>
             <tbody>
-              {topUsers.map((u, i) => (
+              {topUsers.map((u: TopUser, i: number) => (
                 <tr key={u.email} className={i < topUsers.length - 1 ? "border-b border-gray-50 dark:border-gray-800/50" : ""}>
                   <td className="px-5 py-3">
                     <p className="font-medium text-gray-900 dark:text-gray-100 truncate max-w-xs">{u.name ?? u.email}</p>
@@ -226,7 +228,7 @@ export default async function AdminPage() {
               </tr>
             </thead>
             <tbody>
-              {recentUsers.map((u, i) => (
+              {recentUsers.map((u: RecentUser, i: number) => (
                 <tr key={u.email} className={i < recentUsers.length - 1 ? "border-b border-gray-50 dark:border-gray-800/50" : ""}>
                   <td className="px-5 py-3">
                     <p className="font-medium text-gray-900 dark:text-gray-100">{u.name ?? u.email}</p>
